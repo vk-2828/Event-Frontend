@@ -1,63 +1,459 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
 
-// Dummy events data (replace with API/backend later)
-const events = [
-  { 
-    id: 1, 
-    title: "Tech Conference 2025", 
-    date: "Sep 20, 2025", 
-    time: "10:00 AM - 5:00 PM",
-    location: "New York", 
-    image: "https://source.unsplash.com/800x400/?conference", 
-    description: "A full-day tech conference covering AI, Web3, and cloud computing.",
-    rules: ["Must register online", "Bring valid ID", "Follow the code of conduct"]
-  },
-  { 
-    id: 2, 
-    title: "Music Fest", 
-    date: "Oct 10, 2025", 
-    time: "3:00 PM - 11:00 PM",
-    location: "Los Angeles", 
-    image: "https://source.unsplash.com/800x400/?music", 
-    description: "Experience live performances from top artists around the world.",
-    rules: ["No outside food or drinks", "Tickets are non-refundable"]
-  },
-  // Add other events similarly
-];
+
+
+// import React, { useEffect, useState } from 'react';
+// import { useParams, Link } from 'react-router-dom';
+// import api from '../api/axios.js';
+// import { useAuth } from '../context/AuthProvider.jsx';
+
+// const EventDetails = () => {
+//   const { id } = useParams();
+//   const { user } = useAuth();
+//   const [event, setEvent] = useState(null);
+//   const [participants, setParticipants] = useState([]);
+//   const [loading, setLoading] = useState(true);
+
+//   // Check user roles
+//   const roles = user?.roles || [];
+//   const isParticipant = roles.includes('participant');
+//   const isOrganiser = roles.includes('organiser');
+
+//   useEffect(() => {
+//     const fetchEvent = async () => {
+//       try {
+//         const token = localStorage.getItem('token');
+
+//         // Fetch event details
+//         const eventRes = await api.get(`/events/${id}`, {
+//           headers: { Authorization: `Bearer ${token}` },
+//         });
+//         setEvent(eventRes.data);
+
+//         // Fetch participants only if organiser
+//         if (isOrganiser) {
+//           const participantsRes = await api.get(`/events/${id}/participants`, {
+//             headers: { Authorization: `Bearer ${token}` },
+//           });
+//           setParticipants(participantsRes.data);
+//         }
+
+//         setLoading(false);
+//       } catch (err) {
+//         console.error(err);
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchEvent();
+//   }, [id, isOrganiser]);
+
+//   if (loading) return <div className="text-center text-xl mt-20">Loading...</div>;
+//   if (!event) return <div className="text-center text-xl mt-20">Event not found!</div>;
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200 p-8">
+//       {/* Event Details */}
+//       <div className="w-full max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden p-8">
+//         <h1 className="text-5xl font-bold text-purple-700 mb-4">{event.title}</h1>
+//         <p className="text-gray-700 text-lg"><span className="font-semibold">Date:</span> {new Date(event.date).toDateString()}</p>
+//         <p className="text-gray-700 text-lg"><span className="font-semibold">Venue:</span> {event.venue || 'N/A'}</p>
+//         <p className="text-gray-700 text-lg"><span className="font-semibold">Description:</span> {event.description}</p>
+//         {event.schedule && <p className="text-gray-700 text-lg"><span className="font-semibold">Schedule:</span> {event.schedule}</p>}
+//         {event.rules && event.rules.length > 0 && (
+//           <div className="mt-2">
+//             <h2 className="text-2xl font-semibold text-purple-700 mb-1">Rules / Guidelines:</h2>
+//             <ul className="list-disc list-inside text-gray-700">
+//               {event.rules.split('\n').map((rule, index) => (
+//                 <li key={index}>{rule}</li>
+//               ))}
+//             </ul>
+//           </div>
+//         )}
+//         {event.contact && <p className="text-gray-700 text-lg mt-2"><span className="font-semibold">Contact:</span> {event.contact}</p>}
+
+//         {/* Show Register button only for participants */}
+//         {isParticipant && (
+//           <button className="w-full mt-6 bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 rounded-xl shadow-lg hover:scale-105 transition-transform font-semibold">
+//             Register / Join Event
+//           </button>
+//         )}
+//       </div>
+
+//       {/* Participants List only for organisers */}
+//       {isOrganiser && (
+//         <div className="w-full max-w-6xl mx-auto mt-10">
+//           <h2 className="text-3xl font-bold text-purple-700 mb-4">Participants ({participants.length})</h2>
+//           {participants.length === 0 ? (
+//             <p className="text-gray-700 text-lg">No participants registered yet.</p>
+//           ) : (
+//             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//               {participants.map((p, idx) => (
+//                 <div key={idx} className="bg-white p-5 rounded-2xl shadow-lg hover:shadow-2xl transition">
+//                   <h3 className="text-xl font-semibold text-purple-700">{p.name}</h3>
+//                   <p className="text-gray-700"><span className="font-semibold">Email:</span> {p.email}</p>
+//                   {p.phone && <p className="text-gray-700"><span className="font-semibold">Phone:</span> {p.phone}</p>}
+//                 </div>
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//       )}
+
+//       <Link to="/" className="block text-center mt-8 text-purple-600 font-semibold hover:underline">
+//         Back to Events
+//       </Link>
+//     </div>
+//   );
+// };
+
+// export default EventDetails;
+
+
+// import React, { useState, useEffect } from "react";
+// import { useParams, Link } from "react-router-dom";
+// import { useAuth } from "../context/AuthProvider.jsx";
+// import api from "../api/axios.js";
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+
+// const EventDetails = () => {
+//   const { id } = useParams();
+//   const { user } = useAuth();
+//   const [event, setEvent] = useState(null);
+//   const [participants, setParticipants] = useState([]);
+//   const [loading, setLoading] = useState(true);
+//   const [formData, setFormData] = useState({ college: "", phone: "" });
+
+//   useEffect(() => {
+//     const fetchEvent = async () => {
+//       try {
+//         const token = localStorage.getItem("token");
+
+//         // Fetch event details
+//         const eventRes = await api.get(`/events/${id}`, {
+//           headers: { Authorization: `Bearer ${token}` },
+//         });
+//         setEvent(eventRes.data);
+
+//         // If user is organizer, fetch participants
+//         if (user?.roles.includes("organizer")) {
+//           const participantsRes = await api.get(
+//             `/events/${id}/participants`,
+//             {
+//               headers: { Authorization: `Bearer ${token}` },
+//             }
+//           );
+//           setParticipants(participantsRes.data);
+//         }
+
+//         setLoading(false);
+//       } catch (err) {
+//         console.error(err);
+//         setLoading(false);
+//       }
+//     };
+//     fetchEvent();
+//   }, [id, user]);
+
+//   const handleInputChange = (e) => {
+//     setFormData({ ...formData, [e.target.name]: e.target.value });
+//   };
+
+//   const handleRegister = async () => {
+//     if (!formData.college || !formData.phone) {
+//       toast.error("Please provide college and phone number");
+//       return;
+//     }
+
+//     try {
+//       const token = localStorage.getItem("token");
+//       const registrationData = {
+//         event_id: id,
+//         name: user.name || "",
+//         email: user.email || "",
+//         college: formData.college,
+//         phone: formData.phone,
+//       };
+
+//       await api.post("/registrations", registrationData, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+
+//       toast.success("Registered successfully!");
+//     } catch (err) {
+//       console.error(err.response?.data || err.message);
+//       toast.error(
+//         "Registration failed: " + JSON.stringify(err.response?.data)
+//       );
+//     }
+//   };
+
+//   if (loading) return <div className="text-center text-xl mt-20">Loading...</div>;
+//   if (!event) return <div className="text-center text-xl mt-20">Event not found!</div>;
+
+//   return (
+//     <div className="min-h-screen bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200 p-8">
+//       <ToastContainer />
+//       <div className="w-full max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden p-8">
+//         <h1 className="text-5xl font-bold text-purple-700 mb-4">{event.title}</h1>
+//         <p className="text-gray-700 text-lg"><span className="font-semibold">Date:</span> {new Date(event.date).toDateString()}</p>
+//         <p className="text-gray-700 text-lg"><span className="font-semibold">Venue:</span> {event.venue || 'N/A'}</p>
+//         <p className="text-gray-700 text-lg"><span className="font-semibold">Description:</span> {event.description}</p>
+//         {event.schedule && <p className="text-gray-700 text-lg"><span className="font-semibold">Schedule:</span> {event.schedule}</p>}
+//         {event.rules && event.rules.length > 0 && (
+//           <div className="mt-2">
+//             <h2 className="text-2xl font-semibold text-purple-700 mb-1">Rules / Guidelines:</h2>
+//             <ul className="list-disc list-inside text-gray-700">
+//               {event.rules.split("\n").map((rule, idx) => (
+//                 <li key={idx}>{rule}</li>
+//               ))}
+//             </ul>
+//           </div>
+//         )}
+//         {event.contact && <p className="text-gray-700 text-lg mt-2"><span className="font-semibold">Contact:</span> {event.contact}</p>}
+//       </div>
+
+//       {/* Registration Form for Participants */}
+//       {user?.roles.includes("participant") && (
+//         <div className="w-full max-w-4xl mx-auto mt-8 bg-white rounded-3xl shadow-2xl p-6">
+//           <h2 className="text-3xl font-bold text-purple-700 mb-4">Register for Event</h2>
+//           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+//             <input type="text" value={user.name || ""} disabled placeholder="Name" className="p-3 border rounded-xl" />
+//             <input type="email" value={user.email || ""} disabled placeholder="Email" className="p-3 border rounded-xl" />
+//             <input type="text" name="college" value={formData.college} onChange={handleInputChange} placeholder="College" className="p-3 border rounded-xl" />
+//             <input type="text" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="Phone" className="p-3 border rounded-xl" />
+//           </div>
+//           <button
+//             onClick={handleRegister}
+//             className="w-full mt-6 bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 rounded-xl shadow-lg hover:scale-105 transition-transform font-semibold"
+//           >
+//             Register
+//           </button>
+//         </div>
+//       )}
+
+//       {/* Participants List for Organizer */}
+//       {user?.roles.includes("organizer") && (
+//         <div className="w-full max-w-4xl mx-auto mt-10">
+//           <h2 className="text-3xl font-bold text-purple-700 mb-4">Participants ({participants.length})</h2>
+//           {participants.length === 0 ? (
+//             <p className="text-gray-700 text-lg">No participants registered yet.</p>
+//           ) : (
+//             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+//               {participants.map((p, idx) => (
+//                 <div key={idx} className="bg-white p-5 rounded-2xl shadow-lg hover:shadow-2xl transition">
+//                   <h3 className="text-xl font-semibold text-purple-700">{p.name}</h3>
+//                   <p className="text-gray-700"><span className="font-semibold">Email:</span> {p.email}</p>
+//                   {p.college && <p className="text-gray-700"><span className="font-semibold">College:</span> {p.college}</p>}
+//                   {p.phone && <p className="text-gray-700"><span className="font-semibold">Phone:</span> {p.phone}</p>}
+//                 </div>
+//               ))}
+//             </div>
+//           )}
+//         </div>
+//       )}
+
+//       <Link to="/" className="block text-center mt-8 text-purple-600 font-semibold hover:underline">
+//         Back to Events
+//       </Link>
+//     </div>
+//   );
+// };
+
+// export default EventDetails;
+
+
+
+
+import React, { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthProvider.jsx";
+import api from "../api/axios.js";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const EventDetails = () => {
   const { id } = useParams();
-  const event = events.find(e => e.id === parseInt(id));
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [event, setEvent] = useState(null);
+  const [participants, setParticipants] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({ college: "", phone: "" });
+  const [registered, setRegistered] = useState(false); // track if registered
 
+  // useEffect(() => {
+  //   const fetchEvent = async () => {
+  //     try {
+  //       const token = localStorage.getItem("token");
+
+  //       // Fetch event details
+  //       const eventRes = await api.get(`/events/${id}`, {
+  //         headers: { Authorization: `Bearer ${token}` },
+  //       });
+  //       setEvent(eventRes.data);
+
+  //       // Fetch participants if organizer
+  //       if (user?.roles.includes("organizer")) {
+  //         const participantsRes = await api.get(
+  //           `/events/${id}/participants`,
+  //           { headers: { Authorization: `Bearer ${token}` } }
+  //         );
+  //         setParticipants(participantsRes.data);
+  //       }
+
+  //       setLoading(false);
+  //     } catch (err) {
+  //       console.error(err);
+  //       setLoading(false);
+  //     }
+  //   };
+  //   fetchEvent();
+  // }, [id, user]);
+  
+  useEffect(() => {
+  const fetchEvent = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      // Fetch event details
+      const eventRes = await api.get(`/events/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setEvent(eventRes.data);
+
+      // Fetch user registrations to check if already registered
+      if (user?.roles.includes("participant")) {
+        const regRes = await api.get("/registrations/me", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const isRegistered = regRes.data.some(
+          (reg) => reg.event_id === id
+        );
+        setRegistered(isRegistered); // ✅ mark as registered if already done
+      }
+
+      // Fetch participants if organizer
+      if (user?.roles.includes("organizer")) {
+        const participantsRes = await api.get(
+          `/events/${id}/participants`,
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        setParticipants(participantsRes.data);
+      }
+
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
+  };
+  fetchEvent();
+}, [id, user]);
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleRegister = async () => {
+    if (!formData.college || !formData.phone) {
+      toast.error("Please provide college and phone number");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("token");
+      const registrationData = {
+        event_id: id,
+        name: user.name || "",
+        email: user.email || "",
+        college: formData.college,
+        phone: formData.phone,
+      };
+
+      await api.post("/registrations", registrationData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      toast.success("Registered successfully!");
+      setRegistered(true);          // mark as registered
+      setTimeout(() => navigate("/my-registrations"), 1500); // redirect after 1.5s
+    } catch (err) {
+      console.error(err.response?.data || err.message);
+      toast.error(
+        "Registration failed: " + JSON.stringify(err.response?.data)
+      );
+    }
+  };
+
+  if (loading) return <div className="text-center text-xl mt-20">Loading...</div>;
   if (!event) return <div className="text-center text-xl mt-20">Event not found!</div>;
 
   return (
     <div className="min-h-screen bg-gradient-to-r from-pink-200 via-purple-200 to-blue-200 p-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
-        <img src={event.image} alt={event.title} className="w-full h-64 object-cover" />
-        <div className="p-8 space-y-4">
-          <h1 className="text-4xl font-bold text-purple-700">{event.title}</h1>
-          <p className="text-gray-700 text-lg"><span className="font-semibold">Date:</span> {event.date}</p>
-          <p className="text-gray-700 text-lg"><span className="font-semibold">Time:</span> {event.time}</p>
-          <p className="text-gray-700 text-lg"><span className="font-semibold">Location:</span> {event.location}</p>
-          <p className="text-gray-700 text-lg"><span className="font-semibold">Description:</span> {event.description}</p>
-          <div>
-            <h2 className="text-2xl font-semibold text-purple-700 mb-2">Rules / Guidelines:</h2>
-            <ul className="list-disc list-inside text-gray-700 space-y-1">
-              {event.rules.map((rule, index) => (
-                <li key={index}>{rule}</li>
+      <ToastContainer />
+      <div className="w-full max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden p-8">
+        <h1 className="text-5xl font-bold text-purple-700 mb-4">{event.title}</h1>
+        <p className="text-gray-700 text-lg"><span className="font-semibold">Date:</span> {new Date(event.date).toDateString()}</p>
+        <p className="text-gray-700 text-lg"><span className="font-semibold">Venue:</span> {event.venue || 'N/A'}</p>
+        <p className="text-gray-700 text-lg"><span className="font-semibold">Description:</span> {event.description}</p>
+        {event.schedule && <p className="text-gray-700 text-lg"><span className="font-semibold">Schedule:</span> {event.schedule}</p>}
+        {event.rules && event.rules.length > 0 && (
+          <div className="mt-2">
+            <h2 className="text-2xl font-semibold text-purple-700 mb-1">Rules / Guidelines:</h2>
+            <ul className="list-disc list-inside text-gray-700">
+              {event.rules.split("\n").map((rule, idx) => (
+                <li key={idx}>{rule}</li>
               ))}
             </ul>
           </div>
-          <button className="w-full bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 rounded-xl shadow-lg hover:scale-105 transition-transform font-semibold mt-4">
-            Register / Join Event
-          </button>
-          <Link to="/" className="block text-center mt-4 text-purple-600 font-semibold hover:underline">
-            Back to Events
-          </Link>
-        </div>
+        )}
+        {event.contact && <p className="text-gray-700 text-lg mt-2"><span className="font-semibold">Contact:</span> {event.contact}</p>}
       </div>
+
+      {/* Registration Form for Participants */}
+      {user?.roles.includes("participant") && !registered && (
+        <div className="w-full max-w-4xl mx-auto mt-8 bg-white rounded-3xl shadow-2xl p-6">
+          <h2 className="text-3xl font-bold text-purple-700 mb-4">Register for Event</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="text" value={user.name || ""} disabled placeholder="Name" className="p-3 border rounded-xl" />
+            <input type="email" value={user.email || ""} disabled placeholder="Email" className="p-3 border rounded-xl" />
+            <input type="text" name="college" value={formData.college} onChange={handleInputChange} placeholder="College" className="p-3 border rounded-xl" />
+            <input type="text" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="Phone" className="p-3 border rounded-xl" />
+          </div>
+          <button
+            onClick={handleRegister}
+            className="w-full mt-6 bg-gradient-to-r from-purple-600 to-pink-500 text-white py-3 rounded-xl shadow-lg hover:scale-105 transition-transform font-semibold"
+          >
+            Register
+          </button>
+        </div>
+      )}
+
+      {/* Participants List for Organizer */}
+      {user?.roles.includes("organizer") && (
+        <div className="w-full max-w-4xl mx-auto mt-10">
+          <h2 className="text-3xl font-bold text-purple-700 mb-4">Participants ({participants.length})</h2>
+          {participants.length === 0 ? (
+            <p className="text-gray-700 text-lg">No participants registered yet.</p>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {participants.map((p, idx) => (
+                <div key={idx} className="bg-white p-5 rounded-2xl shadow-lg hover:shadow-2xl transition">
+                  <h3 className="text-xl font-semibold text-purple-700">{p.name}</h3>
+                  <p className="text-gray-700"><span className="font-semibold">Email:</span> {p.email}</p>
+                  {p.college && <p className="text-gray-700"><span className="font-semibold">College:</span> {p.college}</p>}
+                  {p.phone && <p className="text-gray-700"><span className="font-semibold">Phone:</span> {p.phone}</p>}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      <Link to="/" className="block text-center mt-8 text-purple-600 font-semibold hover:underline">
+        Back to Events
+      </Link>
     </div>
   );
 };

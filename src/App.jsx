@@ -9,6 +9,8 @@ import Signin from './pages/Signin.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import Navbar from './components/Navbar.jsx';
 import { useAuth } from './context/AuthProvider.jsx';
+import MyRegistrations from './pages/MyResgistrations.jsx';
+import Chatbot from './components/Chatbot/Chatbot';
 
 function App() {
   const { user } = useAuth();
@@ -18,16 +20,19 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-         <Route path="/event/:id" element={<EventDetails />} />
+         <Route path="/events/:id" element={<EventDetails />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/signin" element={<Signin />} />
+        <Route path="/my-registrations" element={<MyRegistrations />} />
         <Route
           path="/dashboard"
-          element={user?.role === 'organizer' ? <Dashboard /> : <Navigate to="/signin" />}
+          element={user?.roles.includes('organizer') ? <Dashboard /> : <Navigate to="/signin" />}
         />
       </Routes>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
+      <Chatbot/>
     </Router>
+    
   );
 }
 
