@@ -11,6 +11,7 @@ import Navbar from './components/Navbar.jsx';
 import { useAuth } from './context/AuthProvider.jsx';
 import MyRegistrations from './pages/MyResgistrations.jsx';
 import Chatbot from './components/Chatbot/Chatbot';
+import Footer from './components/Footer';
 
 function App() {
   const { user } = useAuth();
@@ -26,11 +27,12 @@ function App() {
         <Route path="/my-registrations" element={<MyRegistrations />} />
         <Route
           path="/dashboard"
-          element={user?.roles.includes('organizer') ? <Dashboard /> : <Navigate to="/signin" />}
+          element={user?.roles?.includes('organizer') ? <Dashboard /> : <Navigate to="/signin" />}
         />
       </Routes>
       <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
       <Chatbot/>
+      <Footer/>
     </Router>
     
   );

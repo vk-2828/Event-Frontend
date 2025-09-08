@@ -1,17 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-// UPDATED: Added your two new iStackphoto images to the collection
-const eventImages = [
-  'https://media.istockphoto.com/id/1313246059/photo/online-conference-of-diverse-employees-on-the-screen.jpg?s=1024x1024&w=is&k=20&c=vKapiL67aYcszOYv5u33NTRrRoLfu4NOPAut1xTadqU=',
-  'https://media.istockphoto.com/id/1788138969/photo/senior-developers-in-a-coworking-space.jpg?s=2048x2048&w=is&k=20&c=WztYvlOBVXf6ywb13gjeY9eEOOVPnYQhA3xdOI4dHhg=',
-  'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb',
-  'https://images.unsplash.com/photo-1540575467063-178a50c2df87?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb',
-  'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb',
-  'https://images.unsplash.com/photo-1511578314322-379afb476865?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb',
-  'https://images.unsplash.com/photo-1523580494863-6f3031224c94?ixlib=rb-4.0.3&q=85&fm=jpg&crop=entropy&cs=srgb',
-];
-
 const EventCard = ({ event }) => {
   const { id, title, date, venue, description } = event;
   const navigate = useNavigate();
@@ -20,14 +9,17 @@ const EventCard = ({ event }) => {
     navigate(`/events/${id}`);
   };
 
-  const imageSrc = eventImages[id % eventImages.length];
+  // --- SOLUTION ---
+  // Generate a consistent, random image for each card using a reliable placeholder service.
+  // This URL is created dynamically for each event and is guaranteed to work.
+  const imageSrc = `https://picsum.photos/seed/${id}/600/400`;
 
   return (
     <div className="bg-white rounded-2xl shadow-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 h-full flex flex-col">
       <img
-        src={imageSrc}
+        src={imageSrc} // Using the new, reliable image source
         alt={title}
-        className="w-full h-48 object-cover"
+        className="w-full h-48 object-cover bg-slate-200" // Added a background color for loading
       />
       <div className="p-5 flex flex-col flex-grow">
         <h3 className="text-xl font-bold text-purple-700 mb-2">{title}</h3>
