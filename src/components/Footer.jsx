@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom'; // Assuming you use React Router for navigation
 
-// --- Social Media Icon Component for the Footer ---
 const SocialIcon = ({ href, children }) => (
   <a href={href} target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-purple-400 transition-colors duration-300">
     <span className="sr-only">{children.type}</span>

@@ -1,26 +1,18 @@
-
-
-
-
-//working code before profile 
-
-
-import { Link, useNavigate } from 'react-router-dom'; // Added useNavigate
+import { Link, useNavigate } from 'react-router-dom'; 
 import { useAuth } from '../context/AuthProvider.jsx';
-import { toast } from 'react-toastify'; // Added toast for logout message
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
-  const { user, logout } = useAuth(); // Changed logout to signout to match AuthProvider
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
     toast.info("You have been logged out.");
-    navigate('/'); // Redirect to home after logout
+    navigate('/');
   };
 
   return (
-    // UPDATED: Background is now white with a shadow. Added sticky positioning.
     <nav className="bg-white h-20 shadow-md sticky top-0 z-50">
       <div className="container mx-auto flex justify-between items-center h-full px-6">
         
